@@ -5,7 +5,7 @@ import prisma from "@/prisma/src";
 export const authOptions = {
     providers:[
         CredentialsProvider({
-            name: "Credentials",
+            name: "Email",
             credentials: {
                 username: { label: "Email", type: "text", placeholder: "example@gmail.com" },
                 password: { label: "Password", type: "password" }
@@ -44,5 +44,7 @@ export const authOptions = {
             },
         })
     ],
+    secret: process.env.NEXTAUTH_SECRET || "secret",
+
     
 }
