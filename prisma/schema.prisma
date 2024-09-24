@@ -12,14 +12,15 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  email      String
-  name       String
-  password   String
-  createdAt  DateTime  @default(now())
-  Channels   Channels? @relation(fields: [channelsId], references: [id])
-  channelsId Int?
-  messages   Message[]
+  id          Int       @id @default(autoincrement())
+  email       String
+  name        String
+  phoneNumber String?
+  password    String
+  createdAt   DateTime  @default(now())
+  Channels    Channels? @relation(fields: [channelsId], references: [id])
+  channelsId  Int?
+  messages    Message[]
 }
 
 model Channels {
