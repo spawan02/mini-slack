@@ -1,13 +1,12 @@
+'use client'
 import Appbar from "@/components/Appbar";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import LandingPage from "@/components/Landing";
+import { signIn } from "next-auth/react";
 
 export default async function Home() {
   return (
     <div>
-      <Appbar />
+      <LandingPage />
     </div>
   );
 }
