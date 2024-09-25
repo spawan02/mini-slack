@@ -1,7 +1,9 @@
 
 const Appbar = () => {
     return (
-        <div>Appbar</div>
+        <div className="bg-gray-300 border-b border-red-400">
+            appbar
+        </div>
     )
 }
 
