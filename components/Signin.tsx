@@ -46,7 +46,7 @@ const Signin = () => {
                         <label>Password:</label>
                         <Input type="password" placeholder="enter password" onChange={handlePasswordChange} />
                     </div>
-                    <button type="submit" onClick={() => router.push('/dashboard')} className=" bg-blue-600 transition-transform duration-500 delay-200 hover:scale-110 ease-in-out rounded-md p-2">SignIn</button>
+                    <button type="submit" onClick={handleSubmit} className=" bg-blue-600 transition-transform duration-500 delay-200 hover:scale-110 ease-in-out rounded-md p-2">SignIn</button>
                 </div>
             </div>
 
