@@ -12,16 +12,16 @@ const webSocketClient = () => {
                 setMessage((m) => [...m, message.data])
             }
         }
-        if (!socket) {
-            return <div>
-                connecting to a socket server...
-            </div>
-        }
-        return socket.close()
+
     }, [socket])
+    if (!socket) {
+        return <div>
+            connecting to a socket server...
+        </div>
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value)
-
     }
     return (
         <div>
