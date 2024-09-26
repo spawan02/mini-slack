@@ -3,10 +3,11 @@ import { WebSocketServer } from "ws"
 
 
 const app = express()
-const httpServer = app.listen(8080)
+const httpServer = app.listen(4000)
 
 const wss = new WebSocketServer({server:httpServer})
 wss.on('connection',(ws)=>{
+    console.log("websocket connected")
     ws.on('message',(data)=>{
         wss.clients.forEach((client)=>{
             if(client.readyState === WebSocket.OPEN){
