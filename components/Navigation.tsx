@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 const Navigation = () => {
     const router = useRouter()
