@@ -35,7 +35,6 @@ export default function LandingPage() {
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
           onClick={handleSubmit}
-
         >
           <Button
             size="lg"
@@ -50,6 +49,13 @@ export default function LandingPage() {
             animate={{ opacity: isHovered ? 0.85 : 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           />
+        </motion.div>
+        <motion.div
+          whileHover={{ scale: 1.5 }}
+          whileTap={{ scale: 0.95 }}
+          className=''
+        >
+
         </motion.div>
 
         <motion.div
