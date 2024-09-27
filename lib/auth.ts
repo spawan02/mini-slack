@@ -1,5 +1,4 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google"
 import bcrypt from "bcrypt"
 import prisma from "@/prisma/src";
 import { userSchemaValidation } from "@/config/validator";
@@ -7,13 +6,13 @@ import { userSchemaValidation } from "@/config/validator";
 export const authOptions = {
     providers:[
         CredentialsProvider({
-            name: "Credentials",
+            name: "Email",
             credentials: {
-                email: { label: "Email", type: "text", placeholder: "example@gmail.com" },
+                username: { label: "Email", type: "text", placeholder: "example@gmail.com" },
                 password: { label: "Password", type: "password" }
               },
-              async authorize(credentials): Promise<any> { 
-                console.log(credentials)
+              async authorize(credentials): Promise<any> {
+               
                 const userValidation =  userSchemaValidation.safeParse(credentials)
                 if(!userValidation.success){
                     console.log('error')
@@ -47,25 +46,16 @@ export const authOptions = {
                         id: user.id.toString()
                     }
                 }catch(e){
-                    console.log(e)
+                    console.error(e)
                 }
                 return null
             },
-        }),
-        GoogleProvider({
-            clientId: process.env.GOOGLE_ID || "",
-            clientSecret: process.env.GOOGLE_SECRET || "",
-          })
+        })
     ],
     secret: process.env.NEXTAUTH_SECRET || "secret",
-    callbacks: {
-        async session({ token, session }: any) {
-            session.user.id = token.sub
-            return session
-        }
-    },
     pages:{
         error: '/error',
-       
+        signIn: '/signin'
     }
+    
 }

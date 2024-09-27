@@ -20,7 +20,7 @@ const Signin = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault()
         const res = await signIn('credentials', {
-            email: email.current,
+            username: email.current,
             password: password.current
         })
         if (res?.error) {
