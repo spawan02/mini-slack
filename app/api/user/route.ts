@@ -1,7 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 
 export async function GET(){
@@ -14,6 +14,5 @@ export async function GET(){
         }
     }catch{
         redirect("/ ")
-        
     }
 }
