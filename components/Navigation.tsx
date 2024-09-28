@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 const Navigation = () => {
     const router = useRouter()
     const handleSubmit = () => {
-        router.push("/signin")
+        router.push("/api/auth/signin")
     }
     return (
         <div className="bg-gray-900">

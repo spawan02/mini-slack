@@ -6,7 +6,10 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
+      className={
+        // @ts-expect-error: The library has a type mismatch that is known.
+
+        cn("animate-pulse rounded-md bg-primary/10", className)}
       {...props}
     />
   )

@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from "next/navigation"
 import { Input } from "./ui/input"
 import React, { useRef } from "react"
 import { signIn } from "next-auth/react"
@@ -28,7 +27,6 @@ const Signin = () => {
             window.location.href = `/auth/error?error=${res.error}`;
         }
     }
-    const router = useRouter()
     return (
         <div className="bg-black flex justify-center items-center min-h-screen">
             <div className="bg-gray-700 rounded p-8 w-96 h-96 m-2">

@@ -1,5 +1,4 @@
 // pages/auth/error.tsx<
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -13,12 +12,14 @@ const ErrorPage = () => {
                 <p className='pb-8'>
                     Unexpected Error
                 </p>
+                <div>
 
-                <Button className="bg-blue-400 transition delay-150 duration-700 hover:scale-110 hover:bg-indigo-500 ">
-                    <Link href={'/'}>
-                        Try again
+                    <Link href={'/'} className='hover:cursor-pointer'>
+                        <Button className="bg-blue-400 transition delay-150 duration-700 hover:scale-110 hover:bg-indigo-500">
+                            Try again
+                        </Button>
                     </Link>
-                </Button>
+                </div>
 
             </div>
         </div>

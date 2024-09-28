@@ -3,12 +3,12 @@ import useWebSocket from '@/app/hooks/useWebSocket'
 import React, { useEffect, useState } from 'react'
 
 const WebSocketClient = () => {
-    const socket = useWebSocket("ws://localhost:4000")
+    const socket = useWebSocket("ws://localhost:3000")
     const [message, setMessage] = useState<string[]>([])
     const [value, setValue] = useState("")
     useEffect(() => {
         if (socket) {
-            socket.onmessage = (message) => {
+            socket.onmessage = (message: any) => {
                 setMessage((m) => [...m, message.data])
             }
         }
@@ -16,7 +16,6 @@ const WebSocketClient = () => {
     }, [socket])
     if (!socket) {
         return <div className='flex justify-center items-center h-screen text-2xl '>
-
             connecting to a socket server...
         </div>
     }

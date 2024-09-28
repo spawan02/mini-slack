@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useTheme } from 'next-themes'
-import { Moon, Sun, LogIn } from 'lucide-react'
+// import { useTheme } from 'next-themes'
+import { LogIn } from 'lucide-react'
 import HeroSection from './HeroSection'
 import Navigation from './Navigation'
 import { useRouter } from 'next/navigation'
@@ -13,12 +13,12 @@ import FeatureCard from './FeatureCard'
 
 
 export default function LandingPage() {
-  const { theme, setTheme } = useTheme()
+  // const { theme, setTheme } = useTheme()
   const [isHovered, setIsHovered] = useState(false)
   const router = useRouter()
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
-  }
+  // const toggleTheme = () => {
+  //   setTheme(theme === 'dark' ? 'light' : 'dark')
+  // }
   const handleSubmit = () => {
     router.push("/api/auth/signin")
   }

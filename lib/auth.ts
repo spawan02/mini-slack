@@ -13,7 +13,7 @@ export const authOptions = {
                 password: { label: "Password", type: "password" }
               },
               async authorize(credentials): Promise<any> { 
-                console.log(credentials)
+                
                 const userValidation =  userSchemaValidation.safeParse(credentials)
                 if(!userValidation.success){
                     console.log('error')

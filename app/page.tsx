@@ -1,11 +1,17 @@
-'use client'
-import Appbar from "@/components/Appbar";
 import LandingPage from "@/components/Landing";
-import { signIn } from "next-auth/react";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
+  const session = await getServerSession(authOptions)
+  if (session?.user) {
+    redirect('/home')
+  }
+
   return (
     <div>
+      {new Promise(r => setTimeout(r, 2000))}
       <LandingPage />
     </div>
   );
