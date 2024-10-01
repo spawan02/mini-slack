@@ -13,10 +13,11 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
-  email       String
+  email       String    @unique
   name        String
   phoneNumber String?
-  password    String
+  password    String?
+  provider    Provider  @default(EMAIL)
   createdAt   DateTime  @default(now())
   Channels    Channels? @relation(fields: [channelsId], references: [id])
   channelsId  Int?
@@ -32,8 +33,14 @@ model Channels {
 }
 
 model Message {
-  id      Int    @id @default(autoincrement())
-  content String
-  userId  Int
-  user    User   @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  content   String
+  userId    Int
+  timeStamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Provider {
+  EMAIL
+  GOOGLE
 }
