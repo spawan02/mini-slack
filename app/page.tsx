@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <div>
-      {new Promise(r => setTimeout(r, 2000))}
+      {new Promise(r => setTimeout(r, 1000))}
       <LandingPage />
     </div>
   );

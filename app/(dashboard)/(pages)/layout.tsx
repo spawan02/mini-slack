@@ -9,9 +9,9 @@ interface Props {
 export default async function PageLayout(props: Props) {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
-        redirect("/")
-    }
+    // if (!session) {
+    //     redirect("/")
+    // }
     return (
         <div>
             {props.children}
