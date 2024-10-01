@@ -1,13 +1,20 @@
 "use server"
+import { authOptions } from "@/lib/auth"
 import prisma from "@/prisma/src"
+import { getServerSession } from "next-auth"
 
 export const createMessage = async (value: string) => {
-                     
+    const session = await getServerSession(authOptions)  
+    const userId = session?.user?.id 
     try {
         await prisma.message.create({
             data: {
                 content: value.trim(),
-                userId: 1
+                user:{
+                    connect:{
+                        id: userId
+                    }
+                }
             },
             include: {
                 user: true
@@ -17,5 +24,6 @@ export const createMessage = async (value: string) => {
     } catch (e) {
         console.error(e)
     }
+    return true
 }
 
