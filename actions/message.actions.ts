@@ -4,12 +4,12 @@ import prisma from "@/prisma/src"
 import { getServerSession } from "next-auth"
 
 export const createMessage = async (value: string) => {
-    const session = await getServerSession(authOptions)  
-    const userId = session?.user?.id 
+    const session = await getServerSession(authOptions) 
+    const userId = session?.user?.id    
     try {
         await prisma.message.create({
             data: {
-                content: value.trim(),
+                content: value,
                 user:{
                     connect:{
                         id: userId
