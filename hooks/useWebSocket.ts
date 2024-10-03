@@ -12,13 +12,15 @@ export const useWebSocket = (url: string) => {
   useEffect(() => {
     const ws = new WebSocket(url)
     ws.onopen = () => {
-      console.log('Connected to WebSocket')
       setIsConnected(true)
-      setError(null)
-      toast({
-        title: 'Connected!',
-        description: 'WebSocket connection established.',
-    });
+      if(toast){
+
+        setError(null)
+        toast({
+          title: 'Connected!',
+          description: 'WebSocket connection established.',
+        });
+      }
    
     }
     ws.onclose = () => {
@@ -29,6 +31,11 @@ export const useWebSocket = (url: string) => {
     ws.onerror = (event) => {
       console.error('WebSocket error:', event)
       setError('WebSocket connection error')
+      toast({
+        variant: "destructive",
+        title: "Uh oh!",
+        description: "There was a problem with your request.",
+      })
     }
     
     setSocket(ws)

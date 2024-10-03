@@ -17,12 +17,12 @@ const Header = ({ currentChannel, handleLogout, toggleSidebar }: headerProps) =>
                         <Menu className="h-6 w-6" />
                     </Button>
                     <h2 className="text-xl font-semibold flex items-center">
-                        <Hash width={20} height={20} pr-2 />
+                        <Hash width={20} height={20} className='pr-2' />
                         {currentChannel}
                     </h2>
                 </div>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>
-                    <LogOut className='h-6 w-6 pr-1' />
+                    <LogOut className='h-6 w-6  pr-1' />
                     LogOut
                 </Button>
             </header>

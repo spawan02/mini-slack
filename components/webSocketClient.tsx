@@ -22,7 +22,7 @@ export default function Chat() {
                 setMessages((prevMessages) => [...prevMessages, event.data])
             }
         }
-    }, [socket])
+    }, [socket, userMessages])
 
     useEffect(() => {
         if (scrollAreaRef.current) {

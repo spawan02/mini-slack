@@ -22,12 +22,12 @@ export default function SlackPage() {
 
     const router = useRouter()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const [currentChannel, setCurrentChannel] = useRecoilState(currentChannelAtom);
+    const [currentChannel] = useRecoilState(currentChannelAtom);
     const [messages, setMessages] = useState<string[]>([])
     const [prevMessage, setPrevMessage] = useState<string[]>([])
     const [value, setValue] = useState('')
     const scrollAreaRef = useRef<HTMLDivElement>(null)
-    const { socket, isConnected, error, sendMessage, userMessages } =
+    const { socket, isConnected, sendMessage, userMessages } =
         useWebSocket(`ws://localhost:4000`)
     const session = useSession()
     const toggleSidebar = () => {
@@ -94,14 +94,15 @@ export default function SlackPage() {
                         )}
                     {prevMessage.map((message, index) => (
                         <div key={index}>
+                            {session.data?.user?.name}:
                             {message}
                         </div>
                     ))}
                     {messages.map((message, index) => (
-                        <div className="flex items-start mb-4">
+                        <div key={index} className="flex items-start mb-4">
 
-                            <div key={index} className="mb-2">
-                                {session.data?.user?.name || "user: "}
+                            <div className="mb-2">
+                                {session.data?.user?.name || "user: "}:
                                 {message}
                             </div>
                         </div>
