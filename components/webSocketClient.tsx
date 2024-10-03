@@ -1,37 +1,3 @@
-// import useWebSocket from '@/app/hooks/useWebSocket'
-// import React, { useEffect, useState } from 'react'
-
-// const WebSocketClient = () => {
-//     const socket = useWebSocket("ws://localhost:3000")
-//     const [message, setMessage] = useState<string[]>([])
-//     const [value, setValue] = useState("")
-//     const sendMessage = () => {
-//         if (socket) {
-//             socket.send("Hello from client!");
-//         }
-//     };
-
-//     if (!socket) {
-//         return <div className='flex justify-center items-center h-screen text-2xl '>
-//             connecting to a socket server...
-//         </div>
-//     }
-
-//     const handleChange = (e: any) => {
-//         setValue(e.target.value)
-//     }
-//     console.log(value)
-//     return (
-//         <div>
-//             <input type="text" placeholder="what's in your mind" onChange={handleChange} />
-//             <button onClick={() => sendMessage}>Send</button>
-//             {message}
-//         </div>
-//     )
-// }
-
-// export default WebSocketClient
-
 "use client"
 import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
@@ -65,9 +31,8 @@ export default function Chat() {
     }, [messages])
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault()
-        if (inputMessage.trim() && isConnected) {
+        if (isConnected) {
             sendMessage(inputMessage)
-
             // setMessages((prevMessages) => [...prevMessages, inputMessage])
             setInputMessage('')
         }
@@ -85,7 +50,8 @@ export default function Chat() {
                     </div>
                 }
                 {prevMessage.map((message, index) => (
-                    <div>
+                    <div key={index}>
+
                         {message}
                     </div>
                 ))}

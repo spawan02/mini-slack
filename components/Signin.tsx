@@ -23,7 +23,6 @@ const Signin = () => {
             password: password.current
         })
         if (res?.error) {
-            // Redirect to error page with error message
             window.location.href = `/auth/error?error=${res.error}`;
         }
     }
@@ -36,10 +35,7 @@ const Signin = () => {
                         <label className="">Email:</label>
                         <Input type="email" placeholder="abc@example.com" onChange={handleEmailChange} />
                     </div>
-                    {/* <div className="flex space-x-2">
-                        <Label>PhoneNumber:</Label>
-                        <Input type="number" placeholder="please enter phone number" onChange={handlePhoneChange}/>
-                    </div> */}
+
                     <div className=" py-4">
                         <label>Password:</label>
                         <Input type="password" placeholder="enter password" onChange={handlePasswordChange} />
