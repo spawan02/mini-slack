@@ -47,7 +47,6 @@ export const useWebSocket = (url: string) => {
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(message)
         createMessage(message)
-      
         }
 
      else {
