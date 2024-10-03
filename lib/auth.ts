@@ -12,7 +12,7 @@ export const authOptions = {
                 email: { label: "Email", type: "text", placeholder: "example@gmail.com" },
                 password: { label: "Password", type: "password" }
               },
-              async authorize(credentials): Promise<any> { 
+              async authorize(credentials) { 
                 
                 const userValidation =  userSchemaValidation.safeParse(credentials)
                 if(!userValidation.success){
@@ -27,7 +27,7 @@ export const authOptions = {
                     }
                 })
                 if (existingUser){
-                    const passwordValidation = await bcrypt.compare(password, existingUser.password)
+                    const passwordValidation = await bcrypt.compare(password, existingUser.password??"")
                     if (passwordValidation){
                         return {
                             id: existingUser.id.toString()
@@ -43,8 +43,10 @@ export const authOptions = {
                             password: hashedPassword
                         }
                     })
-                    return {
-                        id: user.id.toString()
+                    if(user) {
+                        return {
+                            id: user.id.toString()
+                        }
                     }
                 }catch(e){
                     console.log(e)
@@ -58,14 +60,42 @@ export const authOptions = {
           })
     ],
     secret: process.env.NEXTAUTH_SECRET || "secret",
+
     callbacks: {
-        async session({ token, session }: any) {
-            session.user.id = token.sub
+    
+        async session({ session, token }: any) {
+            const user = await prisma.user.findUnique({
+                where:{
+                    email: token.email
+                }
+            })
+            if(user){
+                session.user.id = user.id
+            }
             return session
+        },
+        async signIn({ user,account }:any) {
+            if(account.provider=="google"){
+                const existingUser = await prisma.user.findUnique({
+                    where:{
+                        email: user.email
+                    }
+                })
+                if(!existingUser){
+                    await prisma.user.create({
+                    data:{
+                        email: user.email,
+                        name: user.name??"",
+                        provider: 'GOOGLE'
+                    }
+                })
+            }
         }
+        return true;
+        },
     },
     pages:{
         error: '/error',
-       
+        
     }
 }
