@@ -12,11 +12,9 @@ import { feature } from '@/constants/Feature'
 import FeatureCard from './FeatureCard'
 import MyEmojipicker from './Emojipicker'
 
-
 export default function LandingPage() {
   const [isHovered, setIsHovered] = useState(false)
   const router = useRouter()
-
   const handleSubmit = () => {
     router.push("/api/auth/signin")
   }

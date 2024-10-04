@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
 
-const prevMessage = atom<string[]>({
+export const prevMessageAtom = atom<string[]>({
     key: "prevMessage",
     default:[]
 })
