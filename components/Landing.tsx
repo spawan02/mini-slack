@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
 import { feature } from '@/constants/Feature'
 import FeatureCard from './FeatureCard'
+import MyEmojipicker from './Emojipicker'
 
 
 export default function LandingPage() {
@@ -24,7 +25,7 @@ export default function LandingPage() {
       <Navigation />
       <div className="min-h-screen items-center justify-center flex flex-col bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-100 dark:to-white text-white dark:text-gray-900 transition-colors duration-500">
         <HeroSection />
-
+        <MyEmojipicker />
         <motion.div
           whileHover={{ scale: 1.5 }}
           whileTap={{ scale: 0.95 }}

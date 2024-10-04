@@ -1,7 +1,7 @@
 "use client"
-import { useEffect, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { motion } from "framer-motion"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Menu, Send } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
@@ -11,6 +11,9 @@ import Header from './Header'
 import { useRecoilState } from 'recoil'
 import { currentChannelAtom } from '@/store/atoms/currentChannel'
 import SideBarItem from './SideBarItem'
+import { valueAtom } from '@/store/atoms/value'
+import { messageAtom } from '@/store/atoms/Messages'
+import InputForm from './InputForm'
 
 const channels = [
     { id: 1, name: 'general' },
@@ -23,9 +26,9 @@ export default function SlackPage() {
     const router = useRouter()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [currentChannel] = useRecoilState(currentChannelAtom);
-    const [messages, setMessages] = useState<string[]>([])
+    const [messages, setMessages] = useRecoilState(messageAtom)
+    const [value, setValue] = useRecoilState(valueAtom)
     const [prevMessage, setPrevMessage] = useState<string[]>([])
-    const [value, setValue] = useState('')
     const scrollAreaRef = useRef<HTMLDivElement>(null)
     const { socket, isConnected, sendMessage, userMessages } =
         useWebSocket(`ws://localhost:4000`)
@@ -59,7 +62,9 @@ export default function SlackPage() {
         await signOut()
         router.push("/api/auth/signin")
     }
-
+    interface InputFormProps {
+        handleClick: (e: FormEvent<Element>) => Promise<void>;
+    }
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault()
         if (isConnected) {
@@ -109,7 +114,7 @@ export default function SlackPage() {
                     ))}
                 </ScrollArea>
 
-                <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 dark:border-gray-700">
+                {/* <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex items-center space-x-2">
 
                         <Input
@@ -118,13 +123,20 @@ export default function SlackPage() {
                             value={value}
                             onChange={handleInputChange}
                             className="flex-grow"
-
                         />
                         <Button type="submit" size="icon" disabled={!value}>
                             <Send className='h-6 w-4' />
                         </Button>
                     </div>
-                </form>
+                </form> */}
+                <motion.div
+                    initial={{ y: 100 }}
+                    animate={{ y: 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="p-4 border-t bg-white"
+                >
+                    <InputForm handleClick={handleSendMessage} />
+                </motion.div>
             </main>
         </div >
     )
