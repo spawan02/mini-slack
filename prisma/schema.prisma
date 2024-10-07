@@ -18,29 +18,51 @@ model User {
   phoneNumber String?
   password    String?
   provider    Provider  @default(EMAIL)
+  status      Status    @default(OFFLINE)
   createdAt   DateTime  @default(now())
-  Channels    Channels? @relation(fields: [channelsId], references: [id])
-  channelsId  Int?
+  channels    Channel[]
   messages    Message[]
 }
 
-model Channels {
-  id        Int      @id @default(autoincrement())
+model Channel {
+  id        Int       @id @default(autoincrement())
   name      String
-  creatorId String
-  createdAt DateTime @default(now())
-  members   User[]
+  creatorId Int
+  createdAt DateTime  @default(now())
+  users     User[]
+  messages  Message[]
 }
 
 model Message {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   content   String
+  timeStamp DateTime   @default(now())
   userId    Int
-  timeStamp DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  channelId Int?
+  channel   Channel?   @relation(fields: [channelId], references: [id])
+  reactions Reaction[]
+  parentId  Int?
+  parent    Message?   @relation("replies", fields: [parentId], references: [id])
+  replies   Message[]  @relation("replies")
+}
+
+model Reaction {
+  id        Int     @id @default(autoincrement())
+  emoji     String
+  count     Int
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id])
+
+  @@unique([messageId, emoji])
 }
 
 enum Provider {
   EMAIL
   GOOGLE
+}
+
+enum Status {
+  OFFLINE
+  ONLINE
 }
