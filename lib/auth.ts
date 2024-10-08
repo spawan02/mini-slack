@@ -82,13 +82,15 @@ export const authOptions = {
                     }
                 })
                 if(!existingUser){
-                    await prisma.user.create({
+                    const createdUser = await prisma.user.create({
                     data:{
                         email: user.email,
                         name: user.name??"",
                         provider: 'GOOGLE'
                     }
+
                 })
+                return createdUser
             }
         }
         return true;

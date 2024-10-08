@@ -1,6 +1,14 @@
 import { atom } from "recoil";
 
-export const currentChannelAtom = atom({
+
+interface Channel{
+    id: number, 
+    name: string,
+    _count?:{
+        messages:number
+    }
+}
+export const currentChannelAtom = atom<Channel|null>({
     key:"channel",
-    default:'',
+    default: null
 })
