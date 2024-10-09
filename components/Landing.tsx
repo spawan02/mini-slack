@@ -1,5 +1,4 @@
-'use client'
-
+"use client"
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 // import { useTheme } from 'next-themes'
@@ -10,20 +9,19 @@ import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
 import { feature } from '@/constants/Feature'
 import FeatureCard from './FeatureCard'
-import MyEmojipicker from './Emojipicker'
+import { signIn } from 'next-auth/react'
 
 export default function LandingPage() {
   const [isHovered, setIsHovered] = useState(false)
-  const router = useRouter()
   const handleSubmit = () => {
-    router.push("/api/auth/signin")
+    // router.push("/api/auth/signin")
+    signIn()
   }
   return (
     <div >
       <Navigation />
       <div className="min-h-screen items-center justify-center flex flex-col bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-100 dark:to-white text-white dark:text-gray-900 transition-colors duration-500">
         <HeroSection />
-        <MyEmojipicker />
         <motion.div
           whileHover={{ scale: 1.5 }}
           whileTap={{ scale: 0.95 }}

@@ -3,7 +3,7 @@ import { Button } from './ui/button'
 import { Hash, LogOut, Menu } from 'lucide-react'
 
 interface headerProps {
-    currentChannel: string,
+    currentChannel?: string,
     handleLogout: () => void,
     toggleSidebar: () => void
 }
