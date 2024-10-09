@@ -14,39 +14,46 @@ import {
 import { Input } from './ui/input'
 import { useRecoilState } from 'recoil'
 import { currentChannelAtom } from '@/store/atoms/currentChannel'
+import { Channel, User } from '@/types/channel.types'
+import axios from 'axios'
 
-interface Channel {
-    id: number
-    name: string
-}
 
 interface sideBarProps {
     isSidebarOpen: boolean,
     toggleSidebar: () => void,
-    channel: Channel[]
+    channel: Channel[],
+    userId: number
 }
 
-const SideBarItem = ({ channel, isSidebarOpen, toggleSidebar }: sideBarProps) => {
+const SideBarItem = ({ channel, isSidebarOpen, toggleSidebar, userId }: sideBarProps) => {
     const [channels, setChannels] = useState<Channel[]>(channel)
     const [currentChannel, setCurrentChannel] = useRecoilState(currentChannelAtom);
 
     const [isCreateChannelOpen, setIsCreateChannelOpen] = useState(false)
     const [newChannelName, setNewChannelName] = useState('')
 
-    const handleCreateChannel = () => {
+    const handleCreateChannel = async () => {
         if (newChannelName.trim()) {
             const newChannel: Channel = {
                 id: channels.length + 1,
                 name: newChannelName.trim(),
             }
-            setChannels([...channels, newChannel])
+            console.log(newChannelName, userId)
             setNewChannelName('')
             setIsCreateChannelOpen(false)
+            // const response = await axios.post(`/api/channels`, {
+            //     name: newChannelName,
+            //     creatorId: userId
+            // })
+            if (response.status) {
+
+                setChannels([...channels, newChannel])
+            }
         }
     }
 
     const handleChannelSelect = (channel: Channel) => {
-        setCurrentChannel(channel.name)
+        setCurrentChannel(channel)
         if (!(window.innerWidth >= 750)) {
             toggleSidebar()
         }
@@ -76,7 +83,7 @@ const SideBarItem = ({ channel, isSidebarOpen, toggleSidebar }: sideBarProps) =>
                                     {channels.map(channel => (
                                         <li key={channel.id}>
                                             <div
-                                                className={` flex rounded m-2 p-2 text-gray-300 hover:text-white hover:bg-gray-700 ${currentChannel === channel.name ? 'bg-gray-700 text-white' : ''
+                                                className={` flex rounded m-2 p-2 text-gray-300 hover:text-white hover:bg-gray-700 ${currentChannel?.id === channel.id ? 'bg-gray-700 text-white' : ''
                                                     }`}
                                                 onClick={() => handleChannelSelect(channel)}
                                             >
