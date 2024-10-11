@@ -19,9 +19,10 @@ import { messageAtom } from "@/store/atoms/Messages"
 
 interface inputProps {
     userId: number,
-    isConnected: boolean
+    isConnected: boolean,
+    handleSendMessage: (value: string) => void
 }
-const InputForm = ({ userId, isConnected }: inputProps) => {
+const InputForm = ({ handleSendMessage, userId, isConnected }: inputProps) => {
     const [isExpanded, setIsExpanded] = useState(false)
     const [value, setValue] = useRecoilState(valueAtom)
     const [messages, setMessages] = useRecoilState(messageAtom)
@@ -29,28 +30,33 @@ const InputForm = ({ userId, isConnected }: inputProps) => {
     const [currentChannel] = useRecoilState(currentChannelAtom)
     const onSubmit = (e: any) => {
         e.preventDefault()
-        handleSendMesssage()
+        handleSendMessage(value)
         // sendMessage(value)
     }
-    const handleSendMesssage = async () => {
-        const channelId = currentChannel.id
+    // const handleSendMesssage = async () => {
+    //     const channelId = currentChannel.id
 
-        const response = await axios.post(`/api/channels/${channelId}/messages/`, {
-            content: value,
-            userId: userId
-        })
-        setMessages((prev) => [...prev, response.data])
+    //     const response = await axios.post(`/api/channels/${channelId}/messages/`, {
+    //         content: value,
+    //         userId: userId
+    //     })
+    //     // if (response) {
 
-        setValue('')
-    }
+    //     //     console.log(messages)
+    //     // }
+    //     // setMessages((prev) => [...prev, response.data])
+
+    //     setValue('')
+    // }
 
     const handleFormatChange = (format: string) => {
         const textarea = document.getElementById('message-input') as HTMLTextAreaElement
+        if (!textarea) return;
         const start = textarea.selectionStart
         const end = textarea.selectionEnd
         const selectedText = value.substring(start, end)
+        if (!selectedText) return;
         let formattedText = ''
-
         switch (format) {
             case 'bold':
                 formattedText = `*${selectedText}*`
@@ -68,9 +74,11 @@ const InputForm = ({ userId, isConnected }: inputProps) => {
                 formattedText = selectedText
         }
 
-        setValue(
-            value.substring(0, start) + formattedText + value.substring(end)
-        )
+
+        const newValue = value.substring(0, start) + formattedText + value.substring(end)
+        setValue(newValue);
+        textarea.focus();
+        textarea.setSelectionRange(start, start + formattedText.length)
     }
     return (
         <form onSubmit={onSubmit}>

@@ -41,10 +41,10 @@ const SideBarItem = ({ channel, isSidebarOpen, toggleSidebar, userId }: sideBarP
             console.log(newChannelName, userId)
             setNewChannelName('')
             setIsCreateChannelOpen(false)
-            // const response = await axios.post(`/api/channels`, {
-            //     name: newChannelName,
-            //     creatorId: userId
-            // })
+            const response = await axios.post(`/api/channels`, {
+                name: newChannelName,
+                creatorId: userId
+            })
             if (response.status) {
 
                 setChannels([...channels, newChannel])

@@ -23,27 +23,8 @@ interface messageProps {
 
 const MessageItem = ({ message, user, onReaction, onReply }: messageProps) => {
     const [showReplies, setShowReplies] = useRecoilState(showReplyAtom)
-    const [channels, setChannels] = useState<Channel[]>([])
-    const [messages, setMessages] = useRecoilState(messageAtom)
-    const [currentChannel, setCurrentChannel] = useRecoilState(currentChannelAtom);
     const [replyingTo, setReplyingTo] = useState<Message | null>(null)
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const channelsResponse = await axios.get(`/api/channels`)
-    //         setChannels(channelsResponse.data)
-    //     }
-    //     fetchData()
-    // }, [])
-    // useEffect(() => {
-    //     if (currentChannel) {
-    //         const fetchMessages = async () => {
-    //             const response = await axios.get(`/api/channels/${currentChannel.id}/messages`)
-    //             setMessages(response.data)
-    //         }
-    //         fetchMessages
-    //     }
-    // }, [currentChannel])
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,10 +42,8 @@ const MessageItem = ({ message, user, onReaction, onReply }: messageProps) => {
                 <div className="flex-1">
                     <div className="flex items-baseline">
                         <span className="font-semibold mr-2"> {user?.name}</span>
-                        {/* why message */}
-                        {/* <span className="">{localTime}</span> */}
+
                     </div>
-                    {/* add the message */}
                     <p className="mt-1">{message.content}</p>
                     <div className="flex items-center mt-2 space-x-2">
                         {message.reactions.map(({ emoji, count }) => (

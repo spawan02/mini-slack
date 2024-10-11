@@ -8,14 +8,21 @@
   
   
 export interface Message {
+    id: number,
     userId: number
     user: string
     content: string
-    reactions?: { [key:string]: number }
+    reactions: Reaction[]
     timestamp: string
     replies?: Message[]
   }
+
+export interface Reaction {
+  emoji:string, 
+  count: number
+}
   export interface User {
+    id: number;
     name?: string;
     email: string;
   }

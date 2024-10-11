@@ -1,35 +1,31 @@
-import { getMessages } from '@/actions/getMessages.actions'
-import { createMessage } from '@/actions/message.actions' 
 import { useState, useEffect, useCallback } from 'react'
 import { useToast } from './use-toast'
 
 export const useWebSocket = (url: string) => {
   const [socket, setSocket] = useState<WebSocket | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-  const [userMessages, setUserMessages ] = useState<string[]>([])
   const {toast} = useToast()
+
   useEffect(() => {
     const ws = new WebSocket(url)
     ws.onopen = () => {
       setIsConnected(true)
-      if(toast){
-
+      console.log('ws',isConnected)
         setError(null)
         toast({
           title: 'Connected!',
           description: 'WebSocket connection established.',
         });
-      }
-   
+
     }
-    ws.onclose = () => {
+    ws.onclose = (e) => {
       console.log('Disconnected from WebSocket')
       setIsConnected(false)
     }
     
     ws.onerror = (event) => {
-      console.error('WebSocket error:', event)
+      console.error('WebSocket error')
       setError('WebSocket connection error')
       toast({
         variant: "destructive",
@@ -39,21 +35,17 @@ export const useWebSocket = (url: string) => {
     }
     
     setSocket(ws)
-    getMessage()    
+       
     return () => {
       ws.close()
     }
   }, [url])
 
-  const getMessage =async()=>{
-    const mess = await getMessages()
-    setUserMessages(mess)
-  }
+  
   const sendMessage = useCallback(
      (message: string) => {
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(message)
-        createMessage(message)
         }
 
      else {
@@ -62,6 +54,10 @@ export const useWebSocket = (url: string) => {
     },
     [socket]
   )
+  
 
-  return { socket, isConnected, error, sendMessage, userMessages }
+  return { socket, isConnected, error, sendMessage }
 }
+
+
+

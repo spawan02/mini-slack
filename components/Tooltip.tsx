@@ -21,7 +21,10 @@ const ToolComponent = ({ label, icon, handleFormat }: toolTipProps) => {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant="outline" size="icon" onClick={() => handleFormat(label)} >
+                        <Button variant="outline" size="icon" onClick={(e) => {
+                            e.preventDefault()
+                            handleFormat(label.toLowerCase())
+                        }}>
                             {icon}
                         </Button>
                     </TooltipTrigger>

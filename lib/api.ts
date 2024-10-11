@@ -24,8 +24,13 @@ export async function getMessages(channelId:number, userId?: number) {
             where:{
                 userId
             }, 
-            include:{
-                user:true,
+            select:{
+                user:{
+                    select:{
+                        id:true,
+                        name:true
+                    }
+                },
                 reactions:true    
             },
             orderBy:{timeStamp: "asc"}
@@ -59,8 +64,13 @@ export async function createMessage(
             channelId,
             parentId
         },
-        include:{
-            user:true,
+        select:{
+            user:{
+                select:{
+                    id: true,
+                    name: true
+                }
+            },
             reactions: true
 
         }
@@ -87,10 +97,10 @@ export async function addReaction(messageId:number, emoji:string) {
 }
 
 
-export async function currentUser(userId:number){
+export async function currentUser(email:string){
     return await prisma.user.findFirst({
         where:{
-            id:userId
+            email: email
         }, 
        
     })

@@ -3,12 +3,12 @@
 import { SessionProvider } from "next-auth/react"
 import { RecoilRoot } from "recoil"
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    return <RecoilRoot>
+    return <SessionProvider>
+        <RecoilRoot>
 
-        <SessionProvider>
             {children}
-        </SessionProvider>
-    </RecoilRoot>
+        </RecoilRoot>
+    </SessionProvider>
 }
 
 export default AuthProvider

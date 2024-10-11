@@ -9,6 +9,7 @@ export default async function Home() {
     redirect('/home')
   }
 
+
   return (
     <div>
       <LandingPage />
