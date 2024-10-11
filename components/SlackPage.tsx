@@ -19,6 +19,8 @@ import { Channel, Message, User } from '@/types/channel.types'
 import { ScrollArea } from './ui/scroll-area'
 import { replyingToAtom } from '@/store/atoms/replyingTo'
 import { currentUser } from '@/lib/api'
+import { Skeleton } from './ui/skeleton'
+import { searchQueryAtom } from '@/store/atoms/searchquery'
 
 // const channels = [
 //     { id: 1, name: 'general' },
@@ -44,7 +46,7 @@ const SlackPage = () => {
     const [userId1, setUserId] = useState(0)
     const [user, setUser] = useState<User | null>(null)
     const scrollAreaRef = useRef<HTMLDivElement>(null)
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useRecoilState(searchQueryAtom)
     const [replyingTo, setReplyingTo] = useRecoilState(replyingToAtom)
     const { socket, isConnected, sendMessage } =
         useWebSocket('ws://localhost:4000')
@@ -58,31 +60,29 @@ const SlackPage = () => {
     useEffect(() => {
         if (socket) {
             socket.onmessage = (event) => {
-                // setMessages((prevMessages) => [...prevMessages, event.data])
+                setMessages((prevMessages) => [...prevMessages, event.data])
             }
         }
-    }, [socket])
+    }, [messages])
 
-    // useEffect(() => {
-    //     if (scrollAreaRef.current) {
-    //         scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
-    //     }
-    // }, [messages])
     useEffect(() => {
         const fetchData = async () => {
             const email = session.data?.user?.email
             try {
-                const userRespone = await axios.get(`/api/user/me/?email=${email}`)
-                if (userRespone.data && userRespone.data.user) {
-                    user1 = await userRespone.data.user
-                    setUser(user1)
-                    userId = await user1.id
-                    setUserId(userId)
-                    const channelsResponse = await axios.get(`/api/channels?userId=${userId}`)
-                    setChannels(channelsResponse.data)
-                    // console.log(channelsResponse.data)
-                    if (channelsResponse.data.length > 0) {
-                        setCurrentChannel(channelsResponse.data[0])
+                if (email != undefined) {
+
+                    const userRespone = await axios.get(`/api/user/me/?email=${email}`)
+                    if (userRespone.data && userRespone.data.user) {
+                        user1 = await userRespone.data.user
+                        setUser(user1)
+                        userId = await user1.id
+                        setUserId(userId)
+                        const channelsResponse = await axios.get(`/api/channels?userId=${userId}`)
+                        setChannels(channelsResponse.data)
+                        // console.log(channelsResponse.data)
+                        if (channelsResponse.data.length > 0) {
+                            setCurrentChannel(channelsResponse.data[0])
+                        }
                     }
                 }
             } catch (e) {
@@ -97,7 +97,6 @@ const SlackPage = () => {
     }, [isConnected])
     useEffect(() => {
         try {
-
             if (currentChannel) {
                 const fetchMessage = async () => {
                     const response = await axios.get(`/api/channels/${currentChannel.id}/messages`);
@@ -115,13 +114,11 @@ const SlackPage = () => {
         await signOut()
         router.push("/api/auth/signin")
     }
-    interface InputFormProps {
-        handleClick: (e: FormEvent<Element>) => Promise<void>;
-    }
+
     const handleReaction = async (messageId: number, emoji: string) => {
         const response = await axios.post(`/api/messages/${messageId}/reactions`, {
             emoji,
-            userId: userId
+            userId: userId1
         })
         const newReaction = await response.data;
         setMessages((prevMessages) => prevMessages.map((msg) =>
@@ -136,31 +133,31 @@ const SlackPage = () => {
                 : msg
         ))
     }
-    const filteredMessages = messages.filter(msg =>
-        msg.content.toLowerCase().includes(searchQuery.toLowerCase()))
-    // const handleSendMessage = async () => {
+    const filteredMessages = messages.filter(msg => {
+        if (msg && msg.content) {
+            return (
+                msg.content.toLowerCase().includes(searchQuery.toLowerCase()))
+        }
+        return false
+    })
 
-    //     const handle = async () => {
-
-    //         // sendMessage(value)
-    //         console.log(value)
-    //         // const response = await axios.post(`/api/channels/${currentChannel.id}/messages/`, {
-    //         //     content: value,
-    //         //     userId: userId
-    //         // })
-    //         // setMessages((prev) => [...prev, response.data.content])
-    //         // setValue('')
-    //     }
-
-
-    // }
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value)
+    const handleSendMessage = async (value: string) => {
+        sendMessage(value)
+        const response = await axios.post(`/api/channels/${currentChannel.id}/messages/`, {
+            content: value,
+            userId: userId1
+        })
+        console.log(response.data)
+        setMessages((prev) => [...prev, response.data])
+        setValue('')
     }
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setValue(e.target.value)
+    // }
     return (
         <div className="flex h-screen bg-gray-100 text-gray-900 overflow-hidden">
             <aside className={`bg-gray-800 text-white w-54 flex-shrink-0 ${isSidebarOpen ? 'block' : 'hidden'} md:block`}>{
-                isSidebarOpen && <SideBarItem channel={channel} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} userId={userId} />}
+                isSidebarOpen && <SideBarItem channel={channel} isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} userId={userId1} />}
                 <nav className="p-2 flex ">
                     <ul>
                         <Button variant="ghost" size="icon" className=" mr-2" onClick={toggleSidebar}>
@@ -170,18 +167,23 @@ const SlackPage = () => {
                 </nav>
             </aside>
             <main className="flex-1 flex flex-col">
-                <Header currentChannel={currentChannel?.name} handleLogout={handleLogout} toggleSidebar={toggleSidebar} />
+                <Header currentChannel={currentChannel?.name} handleLogout={handleLogout} toggleSidebar={toggleSidebar} user={user} />
 
-                {/* <ScrollAreaComp session={session} messages={messages} /> */}
                 <ScrollArea className="flex-1 p-4">
                     <AnimatePresence>
                         {
                             isLoading ? (
-                                <div className='text-center items-center font-xl'>...Loading</div>
+                                <div className="flex flex-col justify-center items-center h-screen">
+                                    <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                                    <div className="space-y-2 py-2">
+                                        <Skeleton className="h-4 w-[250px]" />
+                                        <Skeleton className="h-4 w-[250px]" />
+                                    </div>
+                                </div>
                             )
                                 : filteredMessages.map((message) => (
                                     <MessageItem
-                                        key={message.userId}
+                                        key={message.id}
                                         message={message}
                                         onReaction={handleReaction}
                                         onReply={() => setReplyingTo(message)}
@@ -198,7 +200,7 @@ const SlackPage = () => {
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     className="p-4 border-t bg-white"
                 >
-                    <InputForm userId={userId1} isConnected={isConnected} />
+                    <InputForm userId={userId1} isConnected={isConnected} handleSendMessage={handleSendMessage} />
                 </motion.div>
             </main>
         </div >

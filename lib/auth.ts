@@ -30,7 +30,9 @@ export const authOptions = {
                     const passwordValidation = await bcrypt.compare(password, existingUser.password??"")
                     if (passwordValidation){
                         return {
-                            id: existingUser.id.toString()
+                            id: existingUser.id.toString(),
+                            email:existingUser.email
+                            
                         }
                     }
                     return null
@@ -45,7 +47,8 @@ export const authOptions = {
                     })
                     if(user) {
                         return {
-                            id: user.id.toString()
+                            id: user.id.toString(),
+                            email: user.email
                         }
                     }
                 }catch(e){
@@ -63,16 +66,14 @@ export const authOptions = {
 
     callbacks: {
     
-        async session({ session, token }: any) {
-            const user = await prisma.user.findUnique({
-                where:{
-                    email: token.email
-                }
-            })
-            if(user){
-                session.user.id = user.id
-            }
-            return session
+        async session({ session, token, user }: any) {
+               session.user.id = token.id
+               if(user){
+                   session.user.email = user.email
+               }
+
+               return session
+           
         },
         async signIn({ user,account }:any) {
             if(account.provider=="google"){

@@ -102,7 +102,7 @@ async function main() {
   await prisma.reaction.create({
     data: {
       emoji: '👍',
-      messageId: message1.id,
+      messageId: message3.id,
       count:1,
     },
   })
@@ -110,7 +110,7 @@ async function main() {
   await prisma.reaction.create({
     data: {
       emoji: '❤️',
-      messageId: message1.id,
+      messageId: message3.id,
       count:1,    },
   })
 
